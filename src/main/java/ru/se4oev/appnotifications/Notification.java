@@ -1,6 +1,8 @@
 package ru.se4oev.appnotifications;
 
-import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
@@ -10,16 +12,32 @@ import javafx.scene.text.Text;
  */
 public class Notification extends StackPane {
 
-    private ImageView cross = new ImageView();
+    private Label cross = new Label();
+    private Text note = new Text();
+
+    private Runnable onRemove = () -> {};
 
     public Notification(String text, NotificationType type) {
-        Text text1 = new Text(text);
-        getChildren().add(text1);
+        getStyleClass().add("notification");
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(note);
+        cross.setText("Убрать Х");
+        BorderPane.setAlignment(cross, Pos.TOP_RIGHT);
+        borderPane.setTop(cross);
+
+        note.setText(text);
+        getChildren().add(borderPane);
         initialize();
     }
 
     private void initialize() {
-        cross.getStyleClass().add("notification-cross");
+        cross.getStyleClass().add("small-hyperlink-label");
+        cross.setOnMouseClicked(e -> onRemove.run());
+    }
+
+    public void setOnRemove(Runnable onRemove) {
+        this.onRemove = onRemove;
     }
 
 }

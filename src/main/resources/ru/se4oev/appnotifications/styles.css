@@ -16,11 +16,39 @@
     -fx-underline: true;
 }
 
-.hyperlink-label {
+.hyperlink-label,
+.small-hyperlink-label {
     -fx-cursor: hand;
+}
+
+.small-hyperlink-label .text {
+    -fx-font-size: 12px;
+    -fx-fill: -fx-focus-color;
+    -fx-underline: true;
 }
 
 .root-pane {
     -fx-background-color: rgba(164, 164, 164, 0.6);
     -fx-background-radius: 10;
+}
+
+.notification {
+    -fx-background-color : lemonchiffon;
+    -fx-background-radius : 6;
+    -fx-border-radius : 6;
+    -fx-border-width : 1;
+    -fx-border-color : derive(black, 100%);
+}
+
+.note-list {
+    -fx-spacing: 10;
+    -fx-padding: 10 10 10 10;
+}
+
+.notes-scroll-pane {
+    -fx-background-color:transparent;
+}
+
+.notes-scroll-pane .viewport {
+    -fx-background-color: transparent;
 }
