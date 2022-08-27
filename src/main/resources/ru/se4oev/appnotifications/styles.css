@@ -38,6 +38,8 @@
     -fx-border-radius : 6;
     -fx-border-width : 1;
     -fx-border-color : derive(black, 100%);
+    -fx-max-width: 380;
+    -fx-padding: 0 10 5 10;
 }
 
 .note-list {
@@ -51,4 +53,22 @@
 
 .notes-scroll-pane .viewport {
     -fx-background-color: transparent;
+}
+
+/* hide standard scroll-bar*/
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button,
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+}
+
+.opacity-slider {
+    -fx-padding: 10 10 10 10;
+    -fx-orientation: HORIZONTAL;
+}
+
+.opacity-slider .track {
+    -fx-background-color: black;
+    -fx-pref-height: 1.0;
 }

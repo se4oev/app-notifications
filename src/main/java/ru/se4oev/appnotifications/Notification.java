@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Created by karpenko on 25.08.2022.
@@ -22,6 +23,8 @@ public class Notification extends StackPane {
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(note);
+        note.wrappingWidthProperty().bind(maxWidthProperty().subtract(20));
+        note.setTextAlignment(TextAlignment.JUSTIFY);
         cross.setText("Убрать Х");
         BorderPane.setAlignment(cross, Pos.TOP_RIGHT);
         borderPane.setTop(cross);

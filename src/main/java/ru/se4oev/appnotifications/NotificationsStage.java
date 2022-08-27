@@ -8,11 +8,13 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
 import javafx.util.Duration;
 
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,12 +26,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class NotificationsStage extends Stage {
 
     private final VBox noteList = new VBox();
+    private final ScrollPane scrollPane;
     private AnchorPane rootPane = new AnchorPane();
     TranslateTransition openTransition = new TranslateTransition(new Duration(500), rootPane);
     TranslateTransition closeTransition = new TranslateTransition(new Duration(500), rootPane);
     private final Label clear = new Label("Очистить");
     private final Label close = new Label("Закрыть");
     private HBox buttonsBox = new HBox(clear, close);
+    private Timer timer;
 
     public NotificationsStage() {
         initStyle(StageStyle.TRANSPARENT);
@@ -46,15 +50,20 @@ public class NotificationsStage extends Stage {
         buttonsBox.setAlignment(Pos.CENTER);
         rootPane.getChildren().setAll(borderPane);
 
-        ScrollPane scrollPane = new ScrollPane(noteList);
+        scrollPane = new ScrollPane(noteList);
         scrollPane.getStyleClass().add("notes-scroll-pane");
         scrollPane.setFitToWidth(true);
+        scrollPane.hbarPolicyProperty().set(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.vbarPolicyProperty().set(ScrollPane.ScrollBarPolicy.NEVER);
         borderPane.setCenter(scrollPane);
         BorderPane.setAlignment(scrollPane, Pos.BOTTOM_RIGHT);
         noteList.setAlignment(Pos.BOTTOM_RIGHT);
+        borderPane.setTop(slider());
+
         //TODO: если не задавать высоту, то скукоживается
         // нужно привязать к высоте панели
-        noteList.setPrefHeight(1000);
+        noteList.prefHeightProperty().bind(scrollPane.heightProperty().subtract(2));
+        noteList.prefWidthProperty().bind(scrollPane.widthProperty());
 
         initTransition();
 
@@ -62,11 +71,24 @@ public class NotificationsStage extends Stage {
         clear.setOnMouseClicked(e -> clear());
     }
 
+    private Slider slider() {
+        Slider slider = new Slider(0.0, 1.0, 0.6);
+        slider.valueProperty().addListener((o, oldVal, newVal) -> {
+            System.out.println(newVal.doubleValue());
+            rootPane.setStyle(String.format(Locale.ENGLISH, "-fx-background-color: rgba(164, 164, 164, %f)", newVal.doubleValue()));
+        });
+        slider.getStyleClass().add("opacity-slider");
+        return slider;
+    }
+
     private void initTransition() {
         openTransition.setToX(0);
-        openTransition.setOnFinished(a -> addNotes());
+//        openTransition.setOnFinished(a -> addNotes());
         closeTransition.setToX(400);
-        closeTransition.setOnFinished(e -> super.hide());
+        closeTransition.setOnFinished(e -> {
+            timer.cancel();
+            super.hide();
+        });
 
         setOnShowing(e -> {
             Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
@@ -80,7 +102,7 @@ public class NotificationsStage extends Stage {
     }
 
     private void addNotes() {
-        Timer timer = new Timer();
+        timer = new Timer();
         AtomicInteger count = new AtomicInteger(1);
         timer.schedule(new TimerTask() {
             @Override
@@ -89,10 +111,11 @@ public class NotificationsStage extends Stage {
                             Notification notification = new Notification("Превед, Медвед " + count.getAndIncrement(), NotificationType.INFO);
                             notification.setOnRemove(() -> noteList.getChildren().remove(notification));
                             noteList.getChildren().add(notification);
+                            scrollPane.setVvalue(scrollPane.getVmax());
                         }
                 );
             }
-        }, 1000, 500);
+        }, 500, 1000);
     }
 
     private void initStyles() {
@@ -119,4 +142,10 @@ public class NotificationsStage extends Stage {
         closeTransition.play();
     }
 
+    public void addNote(String text) {
+        Notification notification = new Notification(text, NotificationType.INFO);
+        notification.setOnRemove(() -> noteList.getChildren().remove(notification));
+        noteList.getChildren().add(notification);
+        scrollPane.setVvalue(scrollPane.getVmax());
+    }
 }
