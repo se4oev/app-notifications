@@ -1,0 +1,26 @@
+.notifications-image {
+    -fx-cursor: hand;
+}
+
+.notifications-image:hover {
+    -fx-effect: dropshadow(gaussian, #A6A6A6, 15, 0, 0, 3);
+}
+
+.transparent-fill {
+    -fx-background-color: transparent;
+}
+
+.hyperlink-label .text {
+    -fx-font-size: 16px;
+    -fx-fill: -fx-focus-color;
+    -fx-underline: true;
+}
+
+.hyperlink-label {
+    -fx-cursor: hand;
+}
+
+.root-pane {
+    -fx-background-color: rgba(164, 164, 164, 0.6);
+    -fx-background-radius: 10;
+}
