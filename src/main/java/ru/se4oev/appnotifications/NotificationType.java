@@ -6,24 +6,24 @@ package ru.se4oev.appnotifications;
  */
 public enum NotificationType {
 
-    INFO("Информация", "info.png"),
-    ERROR("Ошибка", "error.png"),
-    WARNING("Внимание", "warning.png");
+    INFO("Информация", "info"),
+    ERROR("Ошибка", "error"),
+    WARNING("Внимание", "warning");
 
     private String text;
-    private String image;
+    private String style;
 
-    NotificationType(String text, String image) {
+    NotificationType(String text, String style) {
         this.text = text;
-        this.image = image;
+        this.style = style;
     }
 
     public String text() {
         return text;
     }
 
-    public String image() {
-        return image;
+    public String style() {
+        return style;
     }
 
 }

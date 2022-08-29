@@ -74,7 +74,6 @@ public class NotificationsStage extends Stage {
     private Slider slider() {
         Slider slider = new Slider(0.0, 1.0, 0.6);
         slider.valueProperty().addListener((o, oldVal, newVal) -> {
-            System.out.println(newVal.doubleValue());
             rootPane.setStyle(String.format(Locale.ENGLISH, "-fx-background-color: rgba(164, 164, 164, %f)", newVal.doubleValue()));
         });
         slider.getStyleClass().add("opacity-slider");
@@ -86,7 +85,6 @@ public class NotificationsStage extends Stage {
 //        openTransition.setOnFinished(a -> addNotes());
         closeTransition.setToX(400);
         closeTransition.setOnFinished(e -> {
-            timer.cancel();
             super.hide();
         });
 
@@ -142,8 +140,8 @@ public class NotificationsStage extends Stage {
         closeTransition.play();
     }
 
-    public void addNote(String text) {
-        Notification notification = new Notification(text, NotificationType.INFO);
+    public void addNote(String text, NotificationType type) {
+        Notification notification = new Notification(text, type);
         notification.setOnRemove(() -> noteList.getChildren().remove(notification));
         noteList.getChildren().add(notification);
         scrollPane.setVvalue(scrollPane.getVmax());

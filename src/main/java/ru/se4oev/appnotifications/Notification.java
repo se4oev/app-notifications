@@ -1,8 +1,10 @@
 package ru.se4oev.appnotifications;
 
+import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -13,24 +15,34 @@ import javafx.scene.text.TextAlignment;
  */
 public class Notification extends StackPane {
 
-    private Label cross = new Label();
-    private Text note = new Text();
+    private final ImageView cross = new ImageView();
 
     private Runnable onRemove = () -> {};
 
     public Notification(String text, NotificationType type) {
         getStyleClass().add("notification");
+        ImageView typeImage = new ImageView();
+        typeImage.getStyleClass().add("note-type-icon");
+        typeImage.pseudoClassStateChanged(PseudoClass.getPseudoClass(type.style()), true);
+        cross.getStyleClass().add("notification-cross");
+        cross.setFitWidth(10);
+        cross.setFitHeight(10);
 
         BorderPane borderPane = new BorderPane();
+        Text note = new Text();
         borderPane.setCenter(note);
-        note.wrappingWidthProperty().bind(maxWidthProperty().subtract(20));
+        note.wrappingWidthProperty().bind(maxWidthProperty().subtract(42));
         note.setTextAlignment(TextAlignment.JUSTIFY);
-        cross.setText("Убрать Х");
+        note.getStyleClass().add("note-text");
         BorderPane.setAlignment(cross, Pos.TOP_RIGHT);
         borderPane.setTop(cross);
 
+        HBox hBox = new HBox(typeImage, borderPane);
+        hBox.setAlignment(Pos.CENTER);
+        hBox.setSpacing(5.0);
+
         note.setText(text);
-        getChildren().add(borderPane);
+        getChildren().add(hBox);
         initialize();
     }
 

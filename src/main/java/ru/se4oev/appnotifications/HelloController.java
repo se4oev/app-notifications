@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -17,11 +18,15 @@ public class HelloController {
     @FXML Button btn;
     @FXML ImageView notificationsImage;
     @FXML TextField textField;
+    @FXML ComboBox<NotificationType> noteType;
 
     NotificationsStage notificationsStage = new NotificationsStage();
 
     @FXML
     public void initialize() {
+        noteType.getItems().addAll(NotificationType.values());
+        noteType.valueProperty().setValue(NotificationType.INFO);
+
         notificationsImage.setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY))
                 openNotificationsStage();
@@ -35,7 +40,7 @@ public class HelloController {
             }
         });
         btn.setOnAction(e -> {
-            notificationsStage.addNote(textField.getText());
+            notificationsStage.addNote(textField.getText(), noteType.getValue());
             textField.clear();
         });
     }

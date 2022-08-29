@@ -35,6 +35,6 @@
             </HBox>
          </bottom>
       </BorderPane>
-      <ComboBox prefWidth="150.0" promptText="Тип уведомления" visible="false" />
+      <ComboBox fx:id="noteType" prefWidth="150.0" promptText="Тип уведомления" />
    </children>
 </AnchorPane>
